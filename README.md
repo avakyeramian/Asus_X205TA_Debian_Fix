@@ -1,11 +1,28 @@
 # Asus X205TA on Debian list of fix
-*Tested on GNU/Linux Debian 11 RC LXQT with kernel 5.10.0-7*
+*Tested on GNU/Linux Debian 11 RC1 LXQT with kernel 5.10.0-7*
 
-# Fix Wifi
+## Fix Wifi
 
 todo...
 
 you can check : https://wiki.debian.org/InstallingDebianOn/Asus/X205TA#WiFi
+
+## Activate tap to click on the touchpad
+*Based on https://askubuntu.com/questions/1087328/lubuntu-18-10-how-to-activate-tap-to-click#answer-1088009*
+
+`sudo nano /etc/X11/xorg.conf.d/30-touchpad.conf`
+
+
+>```
+>Section "InputClass"   
+>  Identifier "touchpad"  
+>  Driver "libinput"  
+>  MatchIsTouchpad "on"  
+>  Option "Tapping" "on"  
+>EndSection
+>```
+
+`sudo systemctl reboot`
 
 ## Disable Hibernation
 *Based on https://wiki.debian.org/Suspend#Disable_suspend_and_hibernation*
@@ -17,23 +34,23 @@ you can check : https://wiki.debian.org/InstallingDebianOn/Asus/X205TA#WiFi
 
 `sudo nano /opt/fixaftersleep.sh`
  
-```
-sudo modprobe -r elan_i2c
-sudo modprobe -r brcmfmac
-sudo modprobe brcmfmac
-sudo modprobe elan_i2c
-```
+>```
+>sudo modprobe -r elan_i2c
+>sudo modprobe -r brcmfmac
+>sudo modprobe brcmfmac
+>sudo modprobe elan_i2c
+>```
  
 `sudo chmod +x /opt/fixaftersleep.sh`
  
 `sudo nano /usr/lib/systemd/system-sleep/after-resume.sh`
  
-```
-#!/bin/bash
-if [ "${1}" == "post" ]; then
-        /opt/fixaftersleep.sh
-fi
-```
+>```
+>#!/bin/bash
+>if [ "${1}" == "post" ]; then
+>        /opt/fixaftersleep.sh
+>fi
+>```
  
 `sudo chmod +x /usr/lib/systemd/system-sleep/after-resume.sh`
 
